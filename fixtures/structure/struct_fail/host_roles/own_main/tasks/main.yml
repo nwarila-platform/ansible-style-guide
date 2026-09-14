@@ -1,0 +1,11 @@
+# ============================================================================================= #
+# File: '{{ role_path }}/tasks/main.yml'
+# --- [ Description ] ------------------------------------------------------------------------- #
+#
+# Fixture role: outside applications/ an own entry file is not a loader finding.
+#
+# ============================================================================================= #
+
+- name: 'PROCESS | Run The Host Role'
+  ansible.builtin.debug:
+    msg: 'x'

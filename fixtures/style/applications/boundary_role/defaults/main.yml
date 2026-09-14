@@ -1,0 +1,16 @@
+# ============================================================================================= #
+# File: '{{ role_path }}/defaults/main.yml'
+# --- [ Description ] ------------------------------------------------------------------------- #
+#
+# Fixture role: FMT-02 judges task files only, so a plain, lowercase region label in a defaults
+# file produces nothing; FMT-01 still judges its width.
+#
+# ============================================================================================= #
+
+boundary_role_defaults:
+
+  #region ------ [ marker value ] ------------------------------------------------------------- #
+
+  marker: 'present'
+
+  #endregion --- [ marker value ] ------------------------------------------------------------- #

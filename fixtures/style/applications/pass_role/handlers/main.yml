@@ -1,0 +1,14 @@
+# ============================================================================================= #
+# File: '{{ role_path }}/handlers/main.yml'
+# --- [ Description ] ------------------------------------------------------------------------- #
+#
+# Fixture role: one handler, addressed by topic. Handler names are bare sentence case (NAME-01
+# exempts them) and the topic is what notify: names.
+#
+# ============================================================================================= #
+
+- name: 'Restart the fixture service'
+  listen: 'pass-role-restart-required'
+
+  ansible.builtin.debug:
+    msg: 'restarted'

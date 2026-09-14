@@ -1,0 +1,14 @@
+# ============================================================================================= #
+# File: '{{ role_path }}/handlers/main.yml'
+# --- [ Description ] ------------------------------------------------------------------------- #
+#
+# Fixture role: FACT-01's sentence names task files, so a set_fact in a handler produces nothing
+# until the owner amends the sentence; this file is where that decision is visible.
+#
+# ============================================================================================= #
+
+- name: 'Remember that the fixture service restarted'
+  listen: 'boundary-role-restart-required'
+
+  ansible.builtin.set_fact:
+    __boundary_role_restarted__: true

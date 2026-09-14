@@ -1,0 +1,158 @@
+# =========================================================================================== #
+# File: '{{ role_path }}/tasks/present_windows.yml'
+# --- [ Description ] ----------------------------------------------------------------------- #
+#
+# Fixture role: every construct below breaks one rule on purpose. expected-fail.txt beside this
+# role lists the findings; make selftest proves the rules produce exactly that set.
+#
+# =========================================================================================== #
+---
+#region ------ [ Process: install the thing ] ------------------------------------------------- #
+
+- name: 'Install The Thing Without A Stage Token'
+  block:
+
+    # https://example.invalid/a-single-token-that-no-line-break-can-split-and-that-runs-past-column-97
+
+    - name: 'PROCESS | Remember A Value In A Fact'
+      ansible.builtin.set_fact:
+        __fail_role_value__: 'x'
+
+    - name: 'PROCESS | Remember A Value Through The Legacy Name'
+      ansible.legacy.set_fact:
+        __fail_role_legacy__: 'x'
+
+    - name: 'PROCESS | Loop The Old Way'
+      with_items: [ 'a', 'b' ]
+
+      ansible.builtin.debug:
+        msg: "{{ item }}"
+
+    - name: 'PROCESS | Loop Without A Label'
+      loop: [ 'a', 'b' ]
+
+      ansible.builtin.debug:
+        msg: "{{ item }}"
+
+    - name: 'PROCESS | Loop With A Null Label'
+      loop: [ 'a', 'b' ]
+      loop_control:
+        label: null
+
+      ansible.builtin.debug:
+        msg: "{{ item }}"
+
+    - name: 'PROCESS | Loop With An Empty Label'
+      loop: [ 'a', 'b' ]
+      loop_control:
+        label: ''
+
+      ansible.builtin.debug:
+        msg: "{{ item }}"
+
+    - name: 'PROCESS | Loop With A Bare Loop Variable'
+      loop: [ 'a', 'b' ]
+      loop_control:
+        label: "{{ thing }}"
+        loop_var: 'thing'
+
+      ansible.builtin.debug:
+        msg: "{{ thing }}"
+
+    - name: 'PROCESS | Register Under Another Role Name'
+      register: '__other_role_result__'
+
+      ansible.builtin.debug:
+        msg: 'x'
+
+    - name: 'PROCESS | Register Without Single Quotes'
+      register: "__fail_role_result__"
+
+      ansible.builtin.debug:
+        msg: 'x'
+
+    - name: 'PROCESS | Register A Mapping Instead Of A Name'
+      register:
+        result: 'x'
+
+      ansible.builtin.debug:
+        msg: 'x'
+
+    - name: "PROCESS | Carry A Double Quoted Name"
+      ansible.builtin.debug:
+        msg: 'x'
+
+    - name: 'PROCESS | Carry a Lowercase word'
+      ansible.builtin.debug:
+        msg: 'x'
+
+    - name: 'VALIDATE | Assert Outside The Contract File'
+      ansible.builtin.debug:
+        msg: 'x'
+
+    - name: 'PROCESS | Say Yes To A Legacy Boolean'
+      become: yes
+
+      ansible.builtin.debug:
+        msg: 'x'
+
+    - name: 'PROCESS | Run Past The Right Edge With A Name That Is Far Too Long To Fit In One Line'
+      ansible.builtin.debug:
+        msg: 'x'
+
+    - name: 'PROCESS | Call A Module By Its Short Name'
+      debug:
+        msg: 'x'
+
+    - become: false
+      name: 'PROCESS | Put The Name Second'
+
+      ansible.builtin.debug:
+        msg: 'x'
+
+#endregion --- [ Process: Install The Thing ] ------------------------------------------------- #
+
+# -------------------------------------------------------------------------------------------- #
+
+#region ------ [ Vars: Use A Stage Outside The Set ] ------------------------------------------ #
+
+- name: 'BEGIN | Read The Machine Then Clean Up'
+  block:
+
+    - name: 'BEGIN | Read The Machine'
+      ansible.builtin.debug:
+        msg: 'x'
+
+  always:
+
+    - name: 'PROCESS | Clean Up Under The Wrong Token'
+      ansible.builtin.debug:
+        msg: 'x'
+
+#endregion --- [ Vars: Use A Stage Outside The Set ] ------------------------------------------ #
+
+#region ------ [ Process: Close At Another Indentation ] -------------------------------------- #
+
+- name: 'PROCESS | Stand Between Mismatched Markers'
+  ansible.builtin.debug:
+    msg: 'x'
+
+    #endregion --- [ Process: Close At Another Indentation ] ---------------------------------- #
+
+#region ------ [ Process: Combine Two Defects ] ----------------------------------------------- #
+
+- name: 'PROCESS | Stand Between A Good Open And A Doubly Wrong Close'
+  ansible.builtin.debug:
+    msg: 'x'
+
+#endregion --- [ Process: Combine Two Defects Differently ] ---------------------------------- #
+
+#endregion --- [ Process: Close What Was Never Opened ] --------------------------------------- #
+
+#region ----- [ Five Dashes Is Malformed ] ---------------------------------------------------- #
+
+#region ------ [ Process: Leave This Region Open ] -------------------------------------------- #
+
+- name: 'PROCESS | Stand Alone Under An Open Region'
+  ansible.builtin.debug:
+    msg: 'x'

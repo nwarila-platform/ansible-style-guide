@@ -1,0 +1,15 @@
+# ============================================================================================= #
+# File: '{{ role_path }}/tasks/validate.yml'
+# --- [ Description ] ------------------------------------------------------------------------- #
+#
+# Fixture role: the one contract assert, in the shape validate.yml carries.
+#
+# ============================================================================================= #
+
+- name: 'VALIDATE | Require The Inputs Every State Uses'
+  ansible.builtin.assert:
+    that:
+      - pass_role_running.marker | default('') | length > 0
+    fail_msg: >-
+      Refusing to continue: marker is required for every state. See README.md.
+    quiet: true

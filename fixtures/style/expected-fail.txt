@@ -1,0 +1,37 @@
+fail_role/handlers/main.yml:10 LOOP-01: with_items is not used; iterate with loop:
+fail_role/handlers/main.yml:10 REG-01: register target must be single-quoted
+fail_role/tasks/present_windows.yml:1 FMT-01: banner line is 95 columns; every banner rule line is exactly 97
+fail_role/tasks/present_windows.yml:10 FMT-02: region label 'Process: install the thing' has uncapitalized words: install, the, thing
+fail_role/tasks/present_windows.yml:104 fqcn[action-core]
+fail_role/tasks/present_windows.yml:107 key-order[task]
+fail_role/tasks/present_windows.yml:113 FMT-01: endregion label 'Process: Install The Thing' does not match the region opened at line 10 ('Process: install the thing')
+fail_role/tasks/present_windows.yml:115 FMT-01: banner line is 96 columns; every banner rule line is exactly 97
+fail_role/tasks/present_windows.yml:117 FMT-02: region label 'Vars: Use A Stage Outside The Set' is not '<Stage>: <Description>' with Stage one of Begin, Process, End, Always
+fail_role/tasks/present_windows.yml:12 NAME-01: task name is not 'STAGE | Title Case Imperative' with STAGE one of BEGIN, PROCESS, END, VALIDATE and one space either side of the pipe
+fail_role/tasks/present_windows.yml:128 NAME-01: task inside an always: carries PROCESS but the enclosing stage is BEGIN
+fail_role/tasks/present_windows.yml:140 FMT-01: endregion at a different indentation than the region opened at line 134
+fail_role/tasks/present_windows.yml:148 FMT-01: banner line is 96 columns; every banner rule line is exactly 97
+fail_role/tasks/present_windows.yml:148 FMT-01: endregion label 'Process: Combine Two Defects Differently' does not match the region opened at line 142 ('Process: Combine Two Defects')
+fail_role/tasks/present_windows.yml:15 yaml[line-length]
+fail_role/tasks/present_windows.yml:150 FMT-01: endregion without an open region
+fail_role/tasks/present_windows.yml:152 FMT-01: malformed region marker; expected '#region ------ [ Label ] ---- #' or '#endregion --- [ Label ] ---- #'
+fail_role/tasks/present_windows.yml:154 FMT-01: region opened here is never closed
+fail_role/tasks/present_windows.yml:17 FACT-01: set_fact does not appear in an application role's task files; derive the value in block vars: or read it from register
+fail_role/tasks/present_windows.yml:21 FACT-01: set_fact does not appear in an application role's task files; derive the value in block vars: or read it from register
+fail_role/tasks/present_windows.yml:25 LOOP-01: with_items is not used; iterate with loop:
+fail_role/tasks/present_windows.yml:3 FMT-01: banner line is 95 columns; every banner rule line is exactly 97
+fail_role/tasks/present_windows.yml:31 LOOP-01: loop without loop_control.label (a non-empty string)
+fail_role/tasks/present_windows.yml:37 LOOP-01: loop without loop_control.label (a non-empty string)
+fail_role/tasks/present_windows.yml:45 LOOP-01: loop without loop_control.label (a non-empty string)
+fail_role/tasks/present_windows.yml:53 LOOP-01: loop_var 'thing' is not dunder-named (__name__)
+fail_role/tasks/present_windows.yml:62 REG-01: register target '__other_role_result__' is not '__fail_role_<noun>__'
+fail_role/tasks/present_windows.yml:68 REG-01: register target must be single-quoted
+fail_role/tasks/present_windows.yml:74 REG-01: register target must be a string before it can be '__fail_role_<noun>__'
+fail_role/tasks/present_windows.yml:8 FMT-01: banner line is 95 columns; every banner rule line is exactly 97
+fail_role/tasks/present_windows.yml:81 NAME-01: task name must be single-quoted
+fail_role/tasks/present_windows.yml:85 NAME-01: task name has uncapitalized words: a, word
+fail_role/tasks/present_windows.yml:89 NAME-01: VALIDATE is reserved for validate.yml; this file's stages are BEGIN, PROCESS, END
+fail_role/tasks/present_windows.yml:9 yaml[document-start]
+fail_role/tasks/present_windows.yml:94 yaml[truthy]
+fail_role/tasks/present_windows.yml:99 yaml[line-length]
+fail_role/tasks/validate.yml:10 NAME-01: task name in validate.yml carries PROCESS; contract asserts are VALIDATE

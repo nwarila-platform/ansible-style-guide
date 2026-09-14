@@ -1,0 +1,86 @@
+# ============================================================================================= #
+# File: '{{ role_path }}/tasks/present_windows.yml'
+# --- [ Description ] ------------------------------------------------------------------------- #
+#
+# Fixture role: conforms to every rule the configuration enforces. make selftest proves the
+# rules and the yamllint configuration produce no finding here.
+#
+# ============================================================================================= #
+
+#region ------ [ Begin: Read The Machine ] ---------------------------------------------------- #
+
+- name: 'BEGIN | Read The Machine And Decide One Action'
+  block:
+
+    #region ------ [ Begin: Probe The Marker ] ------------------------------------------------ #
+    # A probe reads; the decision below derives from its result and nothing else.
+
+    - name: 'BEGIN | Probe The Marker'
+      register: '__pass_role_probe__'
+
+      ansible.builtin.debug:
+        msg: 'probe'
+
+    #endregion --- [ Begin: Probe The Marker ] ------------------------------------------------ #
+
+#endregion --- [ Begin: Read The Machine ] ---------------------------------------------------- #
+
+
+#region ------ [ Process: Act On The Decision ] ----------------------------------------------- #
+
+- name: 'PROCESS | Act On The Decision'
+  vars:
+    __entries__: [ 'a', 'b' ]
+  block:
+
+    #region ------ [ Process: Announce Each Entry ] ------------------------------------------- #
+
+    - name: 'PROCESS | Announce Each Entry'
+      loop: "{{ __entries__ }}"
+      loop_control:
+        label: "{{ item }}"
+      notify: 'pass-role-restart-required'
+
+      ansible.builtin.debug:
+        msg: "{{ item }}"
+
+    #endregion --- [ Process: Announce Each Entry ] ------------------------------------------- #
+
+    #region ------ [ Process: Announce Each Entry Under Its Own Variable ] -------------------- #
+
+    - name: 'PROCESS | Announce Each Entry Under Its Own Variable'
+      become: true
+      loop: "{{ __entries__ }}"
+      loop_control:
+        label: "{{ __entry__ }}"
+        loop_var: '__entry__'
+
+      ansible.builtin.debug:
+        msg: "{{ __entry__ }}"
+
+    #endregion --- [ Process: Announce Each Entry Under Its Own Variable ] -------------------- #
+
+#endregion --- [ Process: Act On The Decision ] ----------------------------------------------- #
+
+
+#region ------ [ End: Prove The Result ] ------------------------------------------------------ #
+
+- name: 'END | Prove The Result'
+  block:
+
+    - name: 'END | Report The Probe'
+      ansible.builtin.debug:
+        msg: "{{ __pass_role_probe__.msg }}"
+
+    # ----------------------------------------------------------------------------------------- #
+
+    - name: 'END | Report The Entries'
+      ansible.builtin.debug:
+        msg: "{{ __entries__ | default([], true) | join(', ') }}"
+
+  always:
+
+    - name: 'END | Flush The Notified Handlers'
+      ansible.builtin.meta: 'flush_handlers'
+
+#endregion --- [ End: Prove The Result ] ------------------------------------------------------ #

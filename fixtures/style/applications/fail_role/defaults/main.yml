@@ -1,0 +1,11 @@
+# ============================================================================================= #
+# File: '{{ role_path }}/defaults/main.yml'
+# --- [ Description ] ------------------------------------------------------------------------- #
+#
+# Fixture role: its scaffold is complete so that every finding it produces is a style
+# finding.
+#
+# ============================================================================================= #
+
+fail_role_defaults:
+  marker: 'present'

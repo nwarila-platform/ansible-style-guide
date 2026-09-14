@@ -1,0 +1,30 @@
+# ============================================================================================= #
+# File: '{{ role_path }}/tasks/present_windows.yml'
+# --- [ Description ] ------------------------------------------------------------------------- #
+#
+# Fixture role: every construct below sits on a rule's boundary and must produce no finding. A
+# trailing comment is COM-01's business, not a quoting defect; a suppressed finding stays
+# suppressed; a word with no letter, a digit, or a leading bracket is not an uncapitalized word.
+#
+# ============================================================================================= #
+
+#region ------ [ Process: Walk The Boundaries ] ----------------------------------------------- #
+
+- name: 'PROCESS | Walk The Boundaries Of Every Rule'
+  block:
+
+    - name: 'PROCESS | Carry A Trailing Comment' # the comment is not part of the name
+      register: '__boundary_role_probe__' # nor of the register target
+
+      ansible.builtin.debug:
+        msg: 'x'
+
+    - name: 'PROCESS | Count 7 Things -- (Ephemeral), [Bracketed] And 3.10 Alike'
+      ansible.builtin.debug:
+        msg: "{{ __boundary_role_probe__.msg }}"
+
+    - name: 'Suppressed Finding Stays Suppressed' # noqa: NAME-01
+      ansible.builtin.debug:
+        msg: 'x'
+
+#endregion --- [ Process: Walk The Boundaries ] ----------------------------------------------- #

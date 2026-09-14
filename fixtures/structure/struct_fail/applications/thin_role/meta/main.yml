@@ -1,0 +1,23 @@
+# ============================================================================================= #
+# File: '{{ role_path }}/meta/main.yml'
+# --- [ Description ] ------------------------------------------------------------------------- #
+#
+# Fixture role: meta is present, so only the scaffold, loader, defaults-key and README findings
+# fire.
+#
+# ============================================================================================= #
+
+galaxy_info:
+  role_name: 'thin_role'
+  namespace: 'nwarila_platform'
+  author: 'nwarila-platform'
+  description: 'Fixture role.'
+  license: 'MIT'
+  min_ansible_version: '2.17'
+  platforms:
+    - name: 'Windows'
+      versions:
+        - '2025'
+  galaxy_tags: ['fixture']
+
+dependencies: []

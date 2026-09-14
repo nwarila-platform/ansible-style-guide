@@ -1,0 +1,17 @@
+# ============================================================================================= #
+# File: '{{ role_path }}/defaults/main.yml'
+# --- [ Description ] ------------------------------------------------------------------------- #
+#
+# Fixture role: the namespaced defaults map the loader merges, with one region in the shape
+# defaults files carry.
+#
+# ============================================================================================= #
+
+pass_role_defaults:
+
+  #region ------ [ Marker ] ------------------------------------------------------------------- #
+
+  # The value the probe reports. Any non-empty string; there is no product behind this role.
+  marker: 'present'
+
+  #endregion --- [ Marker ] ------------------------------------------------------------------- #

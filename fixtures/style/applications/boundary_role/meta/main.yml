@@ -1,0 +1,23 @@
+# ============================================================================================= #
+# File: '{{ role_path }}/meta/main.yml'
+# --- [ Description ] ------------------------------------------------------------------------- #
+#
+# Fixture role: its scaffold is complete; its code sits on the rules' boundaries and must
+# produce nothing.
+#
+# ============================================================================================= #
+
+galaxy_info:
+  role_name: 'boundary_role'
+  namespace: 'nwarila_platform'
+  author: 'nwarila-platform'
+  description: 'Fixture role for the role checker.'
+  license: 'MIT'
+  min_ansible_version: '2.17'
+  platforms:
+    - name: 'Windows'
+      versions:
+        - '2025'
+  galaxy_tags: ['fixture']
+
+dependencies: []
