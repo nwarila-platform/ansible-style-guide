@@ -133,7 +133,8 @@ class LintTests(unittest.TestCase):
         role = self.role("sample", loader=False)
         stderr = (
             "WARNING  Listing 4 violation(s) that are fatal\n"
-            "WARNING  Skipped installing collection dependencies due to running in offline mode.\n"
+            "WARNING  Skipped installing collection dependencies due to running in "
+            "offline mode.\n"
             "WARNING unresolved module example"
         )
 

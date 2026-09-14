@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 """Test every branch and interaction of the four structural rules."""
 
+import hashlib
 import shutil
 import tempfile
 import unittest
@@ -35,10 +36,10 @@ class StructureTests(unittest.TestCase):
         (role / "tasks/main.yml").write_bytes(LOADER.read_bytes())
         return role
 
-    def findings(self, role, kind="application", display=None):
+    def findings(self, role, kind="application", role_path=None):
         return check_role(
             role,
-            display or role.name,
+            role_path or role.name,
             kind,
             LOADER_SHA256,
         )
@@ -89,7 +90,7 @@ class StructureTests(unittest.TestCase):
         loader.write_bytes(data[:-1] + bytes([data[-1] ^ 1]))
         findings = [item for item in self.findings(role) if item.id == "LOADER-01"]
         self.assertEqual(len(findings), 1)
-        found = __import__("hashlib").sha256(loader.read_bytes()).hexdigest()
+        found = hashlib.sha256(loader.read_bytes()).hexdigest()
         self.assertEqual(
             findings[0].message,
             "tasks/main.yml is not the shared loader; sha256 "

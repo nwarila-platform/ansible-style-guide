@@ -76,7 +76,10 @@ class DiscoveryTests(unittest.TestCase):
             with self.subTest(prune_name=prune_name):
                 hidden = self.root / prune_name / "applications/hidden"
                 hidden.mkdir(parents=True)
-        self.assertEqual([item.role_path for item in discover(self.root)], ["applications/intended"])
+        self.assertEqual(
+            [item.role_path for item in discover(self.root)],
+            ["applications/intended"],
+        )
 
     def test_symlinked_directory_is_not_followed(self):
         outside = self.root / "outside/applications/linked"
@@ -89,6 +92,24 @@ class DiscoveryTests(unittest.TestCase):
         roles = discover(self.root)
         self.assertEqual([item.role_path for item in roles], ["outside/applications/linked"])
         self.assertTrue(all(not item.role_path.startswith("link/") for item in roles))
+
+    def test_explicit_symlink_input_is_rejected(self):
+        target = self.root / "applications/target"
+        target.mkdir(parents=True)
+        link = self.root / "applications/link"
+        try:
+            link.symlink_to(target, target_is_directory=True)
+        except OSError as error:
+            self.skipTest(str(error))
+        self.assertEqual(discover(link), [])
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            status = main(["check", str(link)])
+        self.assertEqual(status, 2)
+        self.assertEqual(
+            stderr.getvalue(),
+            f"error: {link} is a symbolic link; give the role folder or tree itself\n",
+        )
 
     def test_colliding_direct_role_paths_are_rejected(self):
         first = self.root / "first/applications/same"

@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 """Enforce FMT-01.
 
-"Every banner rule line is exactly 97 columns, including the file-header box, the
+"Every banner rule line [...] is exactly 97 columns, including the file-header box, the
 `# --- [ Description ] --- #` rule, region markers and sibling separators. `#region`
 carries six dashes before the label and `#endregion` three, so the `[` aligns between
 an open/close pair; the labels are byte-identical."

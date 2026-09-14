@@ -9,14 +9,13 @@
 #
 # ============================================================================================= #
 
-# Ignore everything ...
+# Deny by default; every tracked path is allowed below by name.
 **
 
-# --- [ directory spine ] -------------------------------------------------------------------- #
+# --- [ directory spine ] --------------------------------------------------------------------- #
 # Git does not descend into an excluded directory, so every directory on the path to an
 # allowed file is re-included by name. This publishes no files by itself: files inside these
 # directories stay ignored until named below.
-!/
 !/collections/
 !/fixtures/
 !/fixtures/structure/
@@ -76,7 +75,7 @@
 !/rolecheck/lint/rules/
 !/tests/
 
-# --- [ allowed files ] ---------------------------------------------------------------------- #
+# --- [ allowed files ] ----------------------------------------------------------------------- #
 !/.editorconfig
 !/.gitignore
 !/LICENSE

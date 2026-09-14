@@ -8,11 +8,14 @@ checkout on Python 3.12.
 
 ```bash
 make install                                   # pinned toolchain (hash-locked) and the six pinned collections
-python3 -m rolecheck check ansible/applications # every role folder under a tree
-python3 -m rolecheck check ansible/applications/pdq_deploy   # one role folder (its parent must be a namespace directory)
+python3 -m rolecheck check fixtures/style/applications           # every role folder under a tree
+python3 -m rolecheck check fixtures/style/applications/pass_role # one role folder (its parent is a namespace directory)
+python3 -m rolecheck check /path/to/repo/ansible/applications    # a consumer tree; paths may be absolute
 python3 -m rolecheck check --report-only --format json <path> # findings do not fail; usage errors still do; machine-readable
 make fleet ROOTS="/path/to/repo1 /path/to/repo2"            # one report per root under reports/
 ```
+
+The process runs from this checkout; the paths it checks may be anywhere.
 
 A role folder is any immediate subdirectory of a directory named `applications`, `host_roles`, `operating_systems`,
 `utilities` or `roles`, even an empty one. Findings print as `path:line ID: message` (built-in ansible-lint ids carry no

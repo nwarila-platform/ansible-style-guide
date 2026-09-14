@@ -43,7 +43,14 @@ def main(argv=None):
     roles_by_root = []
     all_roles = []
     for raw in arguments.paths:
-        path = Path(raw).resolve()
+        given = Path(raw)
+        if given.is_symlink():
+            print(
+                f"error: {raw} is a symbolic link; give the role folder or tree itself",
+                file=sys.stderr,
+            )
+            return 2
+        path = given.resolve()
         roles = discover(path)
         if not roles:
             print(f"error: no role folder found in {raw}", file=sys.stderr)

@@ -20,7 +20,7 @@ selftest:
 	python3 -m rolecheck check fixtures/style/applications/pass_role fixtures/style/applications/boundary_role > .audit/selftest-clean.txt
 	test -s .audit/selftest-clean.txt
 	test "$$(tail -n 1 .audit/selftest-clean.txt)" = '== total: 2 role(s), 0 finding(s)'
-	! awk '$$2 == "TOOL" || $$3 == "TOOL" { found = 1 } END { exit found ? 0 : 1 }' .audit/selftest-clean.txt
+	awk '$$2 == "TOOL:" { found = 1 } END { exit found ? 1 : 0 }' .audit/selftest-clean.txt
 	python3 -m rolecheck check --report-only fixtures/structure/struct_fail > .audit/selftest-structure.txt
 	test -s .audit/selftest-structure.txt
 	sed '/^== /,$$d' .audit/selftest-structure.txt > .audit/selftest-structure.findings
@@ -62,5 +62,5 @@ clean:
 	set -eu
 	if test -d reports; then rm -r reports; fi
 	rm -f .audit/selftest-*
-	find . -type d -name __pycache__ -exec rm -r {} +
+	find . -path ./.audit -prune -o -type d -name __pycache__ -prune -exec rm -r {} +
 	printf 'OK: %s\n' 'clean'

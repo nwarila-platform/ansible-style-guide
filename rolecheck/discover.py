@@ -44,7 +44,10 @@ def is_role_folder(path):
 def discover(given):
     """Return every role below given according to the namespace contract."""
 
-    root = Path(given).resolve()
+    root = Path(given)
+    if root.is_symlink():
+        return []
+    root = root.resolve()
     if not root.is_dir():
         return []
     direct = is_role_folder(root)

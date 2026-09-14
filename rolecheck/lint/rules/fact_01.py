@@ -8,6 +8,10 @@ in block `vars:` (lazily evaluated, block-scoped) or come from `register`. Never
 
 Not checked: the loader's use is out of scope through the checker's central loader
 exclusion, not through special handling in this rule.
+Handlers and every role kind other than an application role are not judged, because the
+sentence names "an application role's task files"; the owner has not yet amended it (D5),
+and fixtures/style/applications/boundary_role/handlers/main.yml carries the case that
+therefore goes unreported.
 """
 
 from typing import ClassVar

@@ -39,11 +39,10 @@ def _finding(role_path, path, rule_id, message):
     )
 
 
-def check_role(role_dir, name, kind, loader_digest):
+def check_role(role_dir, role_path, kind, loader_digest):
     """Return structural findings for one role folder."""
 
     role_dir = Path(role_dir)
-    role_path = name if isinstance(name, str) else str(name)
     findings = []
     for directory in SCAFFOLD:
         if not (role_dir / directory).is_dir():

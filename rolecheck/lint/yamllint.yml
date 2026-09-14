@@ -1,6 +1,6 @@
-# =========================================================================================== #
+# ============================================================================================= #
 # File: 'rolecheck/lint/yamllint.yml'
-# --- [ Description ] ----------------------------------------------------------------------- #
+# --- [ Description ] ------------------------------------------------------------------------- #
 #
 # The yamllint configuration rolecheck/lint/ansible-lint.yml passes with --yamllint-file. It extends
 # yamllint's default set, so seventeen rules are configured: the three the style specification
@@ -20,7 +20,7 @@
 # The octal-values keys are the pair ansible-lint requires before it accepts a custom yamllint
 # file at all.
 #
-# =========================================================================================== #
+# ============================================================================================= #
 extends: default
 
 rules:
