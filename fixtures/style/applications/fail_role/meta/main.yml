@@ -13,7 +13,7 @@ galaxy_info:
   author: 'nwarila-platform'
   description: 'Fixture role for the role checker.'
   license: 'MIT'
-  min_ansible_version: '2.17'
+  min_ansible_version: '2.18'
   platforms:
     - name: 'Windows'
       versions:

@@ -11,6 +11,10 @@ import yaml
 from .report import Finding
 
 LOADER_SHA256 = "62925c4718913f8c8703d1da221755890c0ab106d5f8c42a420f5b49f7d81652"
+# The default of NWarila/ansible-framework-template at commit
+# ff4d9781ae602818fb95924259328f257c388bf2, declared by
+# ansible/roles/baseline/meta/main.yml and ansible/roles/example_nginx/meta/main.yml.
+TEMPLATE_FLOOR = "2.18"
 SCAFFOLD = (
     "defaults",
     "files",
@@ -37,6 +41,22 @@ def _finding(role_path, path, rule_id, message):
         message,
         "structure",
     )
+
+
+def _declared_floor(path):
+    try:
+        document = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, yaml.YAMLError):
+        return None
+    if not isinstance(document, Mapping):
+        return None
+    galaxy_info = document.get("galaxy_info")
+    if not isinstance(galaxy_info, Mapping):
+        return None
+    declared = galaxy_info.get("min_ansible_version")
+    if declared is None or declared == "":
+        return None
+    return declared
 
 
 def check_role(role_dir, role_path, kind, loader_digest):
@@ -88,6 +108,40 @@ def check_role(role_dir, role_path, kind, loader_digest):
                     "SCAFFOLD-02",
                     f"defaults/main.yml defines no top-level '{expected}' key "
                     f"(found: {keys})",
+                )
+            )
+
+    meta = role_dir / "meta/main.yml"
+    if not meta.is_file():
+        findings.append(
+            _finding(
+                role_path,
+                "meta/main.yml",
+                "FLOOR-01",
+                "meta/main.yml is missing, so no min_ansible_version is declared; "
+                f"the template default is {TEMPLATE_FLOOR!r}",
+            )
+        )
+    else:
+        declared = _declared_floor(meta)
+        if declared is None:
+            findings.append(
+                _finding(
+                    role_path,
+                    "meta/main.yml",
+                    "FLOOR-01",
+                    "meta/main.yml declares no min_ansible_version; "
+                    f"the template default is {TEMPLATE_FLOOR!r}",
+                )
+            )
+        elif declared != TEMPLATE_FLOOR:
+            findings.append(
+                _finding(
+                    role_path,
+                    "meta/main.yml",
+                    "FLOOR-01",
+                    f"min_ansible_version is {declared!r}; "
+                    f"the template default is {TEMPLATE_FLOOR!r}",
                 )
             )
 

@@ -19,9 +19,11 @@ The process runs from this checkout; the paths it checks may be anywhere.
 
 A role folder is any immediate subdirectory of a directory named `applications`, `host_roles`, `operating_systems`,
 `utilities` or `roles`, even an empty one. Findings print as `path:line ID: message` (built-in ansible-lint ids carry no
-message), then one `== role: N finding(s)` line per role, a `== root <path>: N finding(s)` line when the tool has something
-to say about the run itself, and a `== total:` line. Exit 1 on any finding, 0 with `--report-only` or when clean, 2 when a
-path is not a role folder or a tree containing one, when two paths would report the same role, or on a bad option.
+message) and warnings as `path:line ID: warning: message`, then one `== role: N finding(s)` line per role (with
+`; W warning(s)` when it has warnings), a `== root <path>: N finding(s)` line when the tool has something to say about the run
+itself, and a `== total:` line. Exit 1 on any finding, 0 with `--report-only`, when clean, or when the only reports are
+warnings; 2 when a path is not a role folder or a tree containing one, when two paths would report the same role, or on a bad
+option.
 
 The checker evaluates every tree with one toolchain (ansible-core 2.21.4, ansible-lint 26.8.0 and the collections in
 `collections/requirements.yml`), not with each repository's own runtime pins; a repository that pins an older core or
@@ -40,6 +42,7 @@ application roles carry the shared loader `tasks/main.yml`):
 | SCAFFOLD-02 | `defaults/main.yml` defines the top-level `<role>_defaults` key the loader reads. |
 | SCAFFOLD-03 | `README.md`, `meta/main.yml`, `defaults/main.yml` and `tasks/main.yml` exist. |
 | LOADER-01 | In a role under `applications/`, `tasks/main.yml` is byte-identical to the shared framework loader. |
+| FLOOR-01 (warning) | Every role's `meta/main.yml` sets `galaxy_info.min_ansible_version` to the string `2.18`, the default of `NWarila/ansible-framework-template`; a missing file, a missing, null or empty value, or any other value (an unquoted number included) is a warning and never fails the run. |
 
 Style, on every YAML file in the role except a loader copy (excluded by digest, so a role's own `tasks/main.yml` is linted):
 
