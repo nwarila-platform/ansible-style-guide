@@ -1,0 +1,34 @@
+# The checker, shipped as the fleet runs it.
+#
+# Every repository's CI runs this image rather than pip-installing the checker,
+# so each repo is measured by the same code against the same collections.
+#
+# The specification is copied in beside the checker so the image carries the
+# rules it enforces, and ANSIBLE_STYLE_SPEC points at them. Nothing in the
+# checker reads that path yet -- the values a rule states are still hardcoded,
+# and FLOOR-01 is the standing example: rolecheck.structure.TEMPLATE_FLOOR is
+# 2.18 where the rule says 2.21. Making the checker read its own specification
+# is the point of shipping them together and is not done here.
+#
+# Published to ghcr.io/nwarila-platform/ansible-style-guide-rolecheck.
+FROM ghcr.io/nwarila/ubi9-base-python:latest
+
+WORKDIR /opt/rolecheck
+
+COPY requirements.txt requirements-dev.txt ./
+RUN python3 -m pip install --no-cache-dir -r requirements.txt
+
+COPY rolecheck/ ./rolecheck/
+COPY collections/ ./collections/
+# The pages, each carrying its rule's tier and `Checked by:` as front matter.
+COPY docs/ ./spec/
+
+ENV PYTHONPATH=/opt/rolecheck \
+    ANSIBLE_STYLE_SPEC=/opt/rolecheck/spec
+
+LABEL org.opencontainers.image.source="https://github.com/nwarila-platform/ansible-style-guide" \
+      org.opencontainers.image.description="rolecheck, with a copy of the Ansible style specification" \
+      org.opencontainers.image.licenses="MIT"
+
+ENTRYPOINT ["python3", "-m", "rolecheck"]
+CMD ["check", "/src"]

@@ -31,8 +31,17 @@ selftest:
 
 lint:
 	set -eu
-	python3 -m ruff check rolecheck tests
+	python3 -m ruff check rolecheck tests tools
+	python3 tools/gen_allowlist.py --check
 	printf 'OK: %s\n' 'lint'
+
+# Rewrite the .gitignore allowlist from the working tree. `make lint` only
+# checks it; this is the one that edits, so adding a rule page is two commands
+# rather than a hand-edited list of 170 paths.
+allowlist:
+	set -eu
+	python3 tools/gen_allowlist.py
+	printf 'OK: %s\n' 'allowlist'
 
 check:
 	set -eu

@@ -13,7 +13,6 @@ from .lint import run_lint
 from .report import exit_status, json_report, text_report
 from .structure import LOADER_SHA256, check_role
 
-
 LOADER_DIGEST_FILE = Path("meta") / "loader-digest.txt"
 
 

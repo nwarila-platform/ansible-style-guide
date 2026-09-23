@@ -1,0 +1,31 @@
+# Docs build toolchain.
+#
+# The site is Docusaurus, which is Node; the checker in this repository is
+# Python. Rather than carry two toolchains in every workflow and on every
+# developer's machine, the Node side lives here and CI mounts the repository
+# into it. A workflow needs no setup-node step, no lockfile restore and no
+# cache key -- it runs one container.
+#
+# Published to ghcr.io/nwarila-platform/ansible-style-guide-docs-toolchain.
+FROM docker.io/library/node:20.18.1-bookworm-slim
+
+# Fail the build rather than silently producing a site with dead rule links.
+ENV NODE_ENV=production \
+    CI=true
+
+WORKDIR /work
+
+# Dependencies are baked in, so a docs build does no network I/O. package.json
+# pins exact versions (no carets), and package-lock.json is the authority.
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund && npm cache clean --force
+
+# The repository is mounted over /work at run time; node_modules stays because
+# it is outside the mounted paths this image is invoked with.
+ENV PATH="/work/node_modules/.bin:${PATH}"
+
+LABEL org.opencontainers.image.source="https://github.com/nwarila-platform/ansible-style-guide" \
+      org.opencontainers.image.description="Node toolchain for building the Ansible Style Guide site" \
+      org.opencontainers.image.licenses="MIT"
+
+CMD ["docusaurus", "build"]
