@@ -121,7 +121,7 @@ class Name01(AnsibleLintRule):
                     self.create_matcherror(
                         message=diagnostic,
                         details=diagnostic,
-                        lineno=get_line_column(mapping)[0],
+                        lineno=get_line_column(mapping.get("name"))[0],
                         filename=file,
                     )
                 )
