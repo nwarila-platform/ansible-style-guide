@@ -42,7 +42,14 @@ PATTERN_METACHARACTERS = str.maketrans({c: "\\" + c for c in "\\*?[]"})
 
 
 def as_pattern(name):
-    """Escape a path so Git matches it literally."""
+    """Escape a path so Git matches it literally, or refuse if it cannot be."""
+    # .gitignore is line-oriented and offers no escape for a newline, so a
+    # filename containing one has no representation at all. The generator used
+    # to emit it as two lines, and its own --check then certified a file Git
+    # went on ignoring.
+    if "\n" in name or "\r" in name:
+        raise SystemExit(f"REFUSED: {name!r} contains a line break. No .gitignore entry can "
+                         f"match it, so it cannot be allowed. Rename the file.")
     escaped = name.translate(PATTERN_METACHARACTERS)
     return escaped[:-1] + "\\ " if escaped.endswith(" ") else escaped
 

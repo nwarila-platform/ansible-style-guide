@@ -89,7 +89,7 @@ jobs:
           git diff --exit-code -- ANSIBLE-STYLE-SPEC.md
 
       # And the reverse, so a page cannot carry the right text in a shape the
-      # splitter would never produce -- front matter the checker reads, the
+      # splitter would never produce -- the front matter, the
       # recorded section and rule order, the page each rule lives on.
       - name: The pages are exactly what the specification splits to
         run: |

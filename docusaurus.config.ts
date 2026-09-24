@@ -2,8 +2,10 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 // The specification is the product of this repository; the checker in
-// rolecheck/ enforces it. Both ship together so a rule and its enforcement
-// cannot state different things.
+// rolecheck/ is what enforces it. They ship together so that a rule and its
+// enforcement can be made to agree -- not so that they already do. The checker
+// still hardcodes what the rules state, and FLOOR-01 is the standing example:
+// rolecheck.structure.TEMPLATE_FLOOR is 2.18 where the rule says 2.21.
 const config: Config = {
   title: "Ansible Style Guide",
   tagline: "The rules, and the checker that enforces them",
