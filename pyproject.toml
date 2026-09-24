@@ -46,5 +46,6 @@ include = ["rolecheck*"]
 [tool.setuptools.package-data]
 rolecheck = ["lint/*.yml"]
 
-[tool.pytest.ini_options]
-testpaths = ["tests"]
+# No pytest configuration: the tests are unittest, run by `make selftest`, and
+# pytest is in neither requirements file. A [tool.pytest.ini_options] block sat
+# here until 2026-09-24 and made CI look like it ran pytest, which it could not.

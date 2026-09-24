@@ -37,11 +37,22 @@ jobs:
         with:
           python-version: '3.12'
 
+      # `make install` is the repository's own entry point: the hash-pinned
+      # runtime and dev requirements, plus the collections the checker lints
+      # against. The checker cannot run without them.
       - name: Install the toolchain
-        run: pip install --no-cache-dir -r requirements-dev.txt
+        run: make install
 
-      - name: Run the tests
-        run: python -m pytest -q
+      # `make selftest` is the real gate. It runs the checker over fixtures whose
+      # findings are recorded and diffs the output, so a rule that stops firing
+      # fails here; the unit tests it ends with cannot see that.
+      #
+      # This step used to be `python -m pytest -q`, which had never run: the
+      # repository had no remote until 2026-09-24, pytest is not in either
+      # requirements file, and the tests are unittest. The first CI run failed
+      # on "No module named pytest".
+      - name: Run the selftest and the unit tests
+        run: make selftest
 
       # `make lint` is ruff plus the allowlist check. The allowlist is
       # default-deny with no wildcards, so a page added without an entry is
