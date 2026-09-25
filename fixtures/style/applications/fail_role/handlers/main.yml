@@ -1,0 +1,16 @@
+# ============================================================================================= #
+# File: '{{ role_path }}/handlers/main.yml'
+# --- [ Description ] ------------------------------------------------------------------------- #
+#
+# Fixture role: a handler is a task, so LOOP-01 and REG-01 judge it; its bare sentence-case
+# name is NAME-01's stated exemption and must produce nothing.
+#
+# ============================================================================================= #
+
+- name: 'Restart the fixture service the old way'
+  listen: 'fail-role-restart-required'
+  register: "__fail_role_restart__"
+  with_items: [ 'a' ]
+
+  ansible.builtin.debug:
+    msg: "{{ item }}"

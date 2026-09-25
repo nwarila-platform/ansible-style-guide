@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img"
+     aria-label="Ansible Style Guide">
+  <!-- Kept as SVG rather than a binary .ico so every tracked byte in this
+       repository is reviewable in a diff, which is the point of the repo. -->
+  <rect width="64" height="64" rx="12" fill="#1c2b36"/>
+  <path d="M14 33.5 L27 46 L50 19" fill="none" stroke="#5bd18a"
+        stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

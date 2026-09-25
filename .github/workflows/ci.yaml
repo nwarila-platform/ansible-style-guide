@@ -1,0 +1,97 @@
+---
+# =============================================================================
+# CI — the checker, and the specification it reads
+# =============================================================================
+# Two things are verified here that no other repository can verify: that the
+# checker's tests pass, and that the specification still splits losslessly into
+# the pages the site is built from. The second matters because the spec is
+# amended by ruling, often several times a week, and a reformat that drops a
+# clause would otherwise reach the site unnoticed.
+# =============================================================================
+
+name: CI
+
+'on':
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+
+  tests:
+    name: Checker tests
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: '3.12'
+
+      # `make install` is the repository's own entry point: the hash-pinned
+      # runtime and dev requirements, plus the collections the checker lints
+      # against. The checker cannot run without them.
+      - name: Install the toolchain
+        run: make install
+
+      # `make selftest` is the real gate. It runs the checker over fixtures whose
+      # findings are recorded and diffs the output, so a rule that stops firing
+      # fails here; the unit tests it ends with cannot see that.
+      #
+      # This step used to be `python -m pytest -q`, which had never run: the
+      # repository had no remote until 2026-09-24, pytest is not in either
+      # requirements file, and the tests are unittest. The first CI run failed
+      # on "No module named pytest".
+      - name: Run the selftest and the unit tests
+        run: make selftest
+
+      # `make lint` is ruff plus the allowlist check. The allowlist is
+      # default-deny with no wildcards, so a page added without an entry is
+      # simply never published -- silently, and only on the site, which is the
+      # last place anyone would look for a missing rule.
+      - name: Lint, and the allowlist matches the tree
+        run: make lint
+
+  spec-round-trip:
+    name: Specification splits losslessly
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: '3.12'
+
+      # Two comparisons, because join->split->diff alone proves nothing about
+      # content: split re-derives the pages from join's own output, so the two
+      # agree by construction no matter what the pages say. A mutation matrix
+      # run on 2026-09-23 confirmed it -- it caught a deleted page and a
+      # reordered section and missed every edited word.
+      #
+      # ANSIBLE-STYLE-SPEC.md is the fixed point that makes the check real. It
+      # is generated, never hand-edited: the pages are where the specification
+      # is written.
+      - name: The committed specification is exactly what the pages say
+        run: |
+          python3 tools/join_spec.py docs > ANSIBLE-STYLE-SPEC.md
+          git diff --exit-code -- ANSIBLE-STYLE-SPEC.md
+
+      # And the reverse, so a page cannot carry the right text in a shape the
+      # splitter would never produce -- the front matter, the
+      # recorded section and rule order, the page each rule lives on.
+      - name: The pages are exactly what the specification splits to
+        run: |
+          python3 tools/split_spec.py ANSIBLE-STYLE-SPEC.md /tmp/resplit
+          diff -r docs /tmp/resplit

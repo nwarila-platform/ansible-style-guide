@@ -1,0 +1,11 @@
+# ============================================================================================= #
+# File: '{{ role_path }}/tasks/main.yml'
+# --- [ Description ] ------------------------------------------------------------------------- #
+#
+# Fixture role: a hand-written entry file where the shared loader must be.
+#
+# ============================================================================================= #
+
+- name: 'PROCESS | Do It Without The Loader'
+  ansible.builtin.debug:
+    msg: 'x'

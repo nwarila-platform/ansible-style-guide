@@ -1,0 +1,88 @@
+---
+# =============================================================================
+# Pages — publish the specification as a site
+# =============================================================================
+# The build runs inside the docs toolchain image, so this workflow installs
+# nothing: no setup-node, no lockfile restore, no cache key. The image carries
+# node_modules and the site config fails the build on a broken cross-reference
+# between rules, which is a defect rather than a warning because rules cite each
+# other by id.
+#
+# Two prerequisites sit outside this file, and neither is created by it:
+#
+#   - the image itself. There is no workflow here that publishes
+#     ghcr.io/nwarila-platform/ansible-style-guide-docs-toolchain, so until one
+#     exists this workflow cannot run at all. The tag is `:latest`, so the build
+#     environment can also change with no event in this repository -- pin it to
+#     a digest once the image is published.
+#   - the Pages site. actions/configure-pages defaults `enablement` to false and
+#     throws when no site exists, and enabling one needs a token other than
+#     GITHUB_TOKEN. github-terraform-runner creates it from the repository's
+#     declaration, so Terraform must have applied before the first deploy.
+# =============================================================================
+
+name: Pages
+
+'on':
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'src/**'
+      - 'static/**'
+      - 'docusaurus.config.ts'
+      - 'sidebars.ts'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/pages.yaml'
+      # The image decides what `docusaurus build` actually is, so a change to
+      # the Containerfile changes this workflow's output.
+      - 'containers/docs-toolchain/**'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+
+  build:
+    name: Build the site
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/nwarila-platform/ansible-style-guide-docs-toolchain:latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Build
+        run: cp -r /work/node_modules ./node_modules && docusaurus build
+
+      - name: Upload the artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9  # v5.0.0
+        with:
+          path: build
+
+  deploy:
+    name: Deploy to Pages
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+
+      - name: Configure Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6.0.0
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346  # v5.0.1

@@ -1,0 +1,57 @@
+# ============================================================================================= #
+# File: 'rolecheck/lint/yamllint.yml'
+# --- [ Description ] ------------------------------------------------------------------------- #
+#
+# The yamllint configuration rolecheck/lint/ansible-lint.yml passes with --yamllint-file. It extends
+# yamllint's default set, so seventeen rules are configured: the three the style specification
+# maps, the comments rule (require-starting-space off here; the whole id is skipped by
+# ansible-lint), and the thirteen-rule general YAML baseline the consumer repositories already
+# apply through their own .yamllint.yml (anchors, braces, brackets, colons, commas, empty-lines,
+# hyphens, indentation, key-duplicates, new-line-at-end-of-file, new-lines, octal-values,
+# trailing-spaces). Under ansible-lint every one of them fails the run whatever its level here.
+#
+#   LEN-01   line-length      no line exceeds 97 columns, the banner width; absolute, so a
+#                             single unbreakable token past the edge is a finding too
+#   BOOL-01  truthy           true and false only, keys included (which is why workflow files
+#                             quote 'on:')
+#   DOC-01   document-start   no '---' marker; the header box marks the start of the file
+#
+# comments.require-starting-space is off because FMT-01's '#region' markers carry no space.
+# The octal-values keys are the pair ansible-lint requires before it accepts a custom yamllint
+# file at all.
+#
+# ============================================================================================= #
+extends: default
+
+rules:
+  line-length:
+    max: 97
+    level: error
+    allow-non-breakable-words: false
+    allow-non-breakable-inline-mappings: false
+  truthy:
+    allowed-values: ['true', 'false']
+    check-keys: true
+    level: error
+  document-start:
+    present: false
+    level: error
+  comments:
+    require-starting-space: false
+    min-spaces-from-content: 1
+  comments-indentation: disable
+  octal-values:
+    forbid-implicit-octal: true
+    forbid-explicit-octal: true
+  braces:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+  indentation:
+    spaces: 2
+    indent-sequences: consistent
+    check-multi-line-strings: false
+  new-line-at-end-of-file: enable
+  trailing-spaces: enable

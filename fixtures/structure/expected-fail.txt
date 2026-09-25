@@ -1,0 +1,26 @@
+applications/thin_role/README.md:1 SCAFFOLD-03: required file README.md is missing
+applications/thin_role/defaults/main.yml:1 SCAFFOLD-02: defaults/main.yml defines no top-level 'thin_role_defaults' key (found: other_role_defaults)
+applications/thin_role/files:1 SCAFFOLD-01: role scaffold directory 'files' is missing
+applications/thin_role/handlers:1 SCAFFOLD-01: role scaffold directory 'handlers' is missing
+applications/thin_role/library:1 SCAFFOLD-01: role scaffold directory 'library' is missing
+applications/thin_role/lookup_plugins:1 SCAFFOLD-01: role scaffold directory 'lookup_plugins' is missing
+applications/thin_role/meta/main.yml:1 FLOOR-01: warning: min_ansible_version is '2.17'; the template default is '2.18'
+applications/thin_role/module_utils:1 SCAFFOLD-01: role scaffold directory 'module_utils' is missing
+applications/thin_role/molecule:1 SCAFFOLD-01: role scaffold directory 'molecule' is missing
+applications/thin_role/tasks/main.yml:1 LOADER-01: tasks/main.yml is not the shared loader; sha256 31a6c23331eea23f differs from 62925c4718913f8c
+applications/thin_role/templates:1 SCAFFOLD-01: role scaffold directory 'templates' is missing
+applications/thin_role/tests:1 SCAFFOLD-01: role scaffold directory 'tests' is missing
+applications/thin_role/vars:1 SCAFFOLD-01: role scaffold directory 'vars' is missing
+host_roles/own_main/README.md:1 SCAFFOLD-03: required file README.md is missing
+host_roles/own_main/files:1 SCAFFOLD-01: role scaffold directory 'files' is missing
+host_roles/own_main/handlers:1 SCAFFOLD-01: role scaffold directory 'handlers' is missing
+host_roles/own_main/library:1 SCAFFOLD-01: role scaffold directory 'library' is missing
+host_roles/own_main/lookup_plugins:1 SCAFFOLD-01: role scaffold directory 'lookup_plugins' is missing
+host_roles/own_main/meta/main.yml:1 FLOOR-01: warning: meta/main.yml is missing, so no min_ansible_version is declared; the template default is '2.18'
+host_roles/own_main/meta/main.yml:1 SCAFFOLD-03: required file meta/main.yml is missing
+host_roles/own_main/meta:1 SCAFFOLD-01: role scaffold directory 'meta' is missing
+host_roles/own_main/module_utils:1 SCAFFOLD-01: role scaffold directory 'module_utils' is missing
+host_roles/own_main/molecule:1 SCAFFOLD-01: role scaffold directory 'molecule' is missing
+host_roles/own_main/templates:1 SCAFFOLD-01: role scaffold directory 'templates' is missing
+host_roles/own_main/tests:1 SCAFFOLD-01: role scaffold directory 'tests' is missing
+host_roles/own_main/vars:1 SCAFFOLD-01: role scaffold directory 'vars' is missing

@@ -1,0 +1,54 @@
+# ============================================================================================= #
+# File: 'rolecheck/lint/ansible-lint.yml'
+# --- [ Description ] ------------------------------------------------------------------------- #
+#
+# The ansible-lint configuration the role checker runs over every role folder it is given
+# (rolecheck/lint.py builds the invocation; see the README for the command a person runs):
+#
+#   ansible-lint -c rolecheck/lint/ansible-lint.yml --yamllint-file rolecheck/lint/yamllint.yml \
+#     --project-dir <root> --exclude <each loader copy, by digest> -- <role dir> ...
+#   (or, when no loader copy is present:)  ... --project-dir <root> -- <role dir> ...
+#
+# The '--' is not optional: --exclude takes every following argument until it, so a role directory
+# placed after the exclusions would be excluded instead of linted.
+#
+# Every path here is relative to THIS file (ansible-lint resolves rulesdir against the config
+# file's directory), so the invocation works from any working directory. The yamllint file is
+# passed explicitly because ansible-lint otherwise reads whichever .yamllint sits in the working
+# directory. The shared loader is excluded by DIGEST on the command line, never by a path glob
+# here, so a role that carries its own tasks/main.yml is still linted.
+#
+# profile: production is the baseline, and it is the whole profile: every production rule can
+# report, not only the ones the style specification maps (README.md lists those). Every
+# rule in rolecheck/lint/rules/ must ALSO be named in enable_list, because a profile unloads any rule
+# it does not list, custom rules included. use_default_rules keeps the built-in rules loaded
+# beside rulesdir; without it only the custom rules run and a "production profile passed" line
+# reports on nothing.
+#
+# ============================================================================================= #
+profile: production
+
+rulesdir:
+  - rules
+use_default_rules: true
+
+enable_list:
+  - FACT-01
+  - FMT-01
+  - FMT-02
+  - LOOP-01
+  - NAME-01
+  - REG-01
+
+# The style's region markers are spelled '#region' and '#endregion' with no space after the hash
+# (FMT-01). yamllint's comments rule would flag every one of them, and the fleet carries no other
+# comment that lacks the space, so the whole yaml[comments] id is skipped here; rolecheck/lint/yamllint.yml
+# turns off only its require-starting-space option, for anyone running yamllint bare.
+# var-naming[non-string] is skipped because it fires on a mapping-valued register: on 26.6.0 and
+# not on 26.8.0 (measured); REG-01 reports that case identically on both.
+skip_list:
+  - yaml[comments]
+  - var-naming[non-string]
+
+# No Galaxy resolution during lint: the consumer installs its pinned collections first.
+offline: true

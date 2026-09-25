@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rolecheck"
+version = "0.3.0"
+description = "Checks Ansible roles against Nick's Ansible style specification."
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [{ name = "nwarila-platform" }]
+
+# Deliberately unpinned here: the exact versions the fleet runs are pinned in
+# requirements.txt and baked into the published image, so every repository is
+# measured by the same code against the same collections.
+dependencies = [
+  "ansible-core",
+  "ansible-lint",
+  "PyYAML",
+]
+
+[project.scripts]
+rolecheck = "rolecheck.__main__:main"
+
+[project.urls]
+Homepage = "https://nwarila-platform.github.io/ansible-style-guide/"
+Source = "https://github.com/nwarila-platform/ansible-style-guide"
+
+[tool.setuptools.packages.find]
+include = ["rolecheck*"]
+
+# The ansible-lint and yamllint configurations rolecheck/lint.py hands to
+# ansible-lint at runtime, by package-relative path. Without them the installed
+# wheel raises on every lint run, which a test run from the source tree never
+# shows.
+#
+# This said `spec/**/*.md` until 2026-09-23, on the intention that the
+# specification would travel inside the package. There is no `rolecheck/spec/`,
+# so the pattern matched nothing and quietly replaced the two files that are
+# actually needed. The specification lives at the repository root as
+# ANSIBLE-STYLE-SPEC.md and in docs/; the checker does not yet read it, and
+# FLOOR-01 still shows the cost -- rolecheck.structure.TEMPLATE_FLOOR is 2.18
+# where the rule says 2.21. Closing that is its own piece; it is not claimed
+# here.
+[tool.setuptools.package-data]
+rolecheck = ["lint/*.yml"]
+
+# No pytest configuration: the tests are unittest, run by `make selftest`, and
+# pytest is in neither requirements file. A [tool.pytest.ini_options] block sat
+# here until 2026-09-24 and made CI look like it ran pytest, which it could not.

@@ -1,0 +1,16 @@
+# ============================================================================================= #
+# File: '{{ role_path }}/tasks/validate.yml'
+# --- [ Description ] ------------------------------------------------------------------------- #
+#
+# Fixture role: validate.yml holds contract asserts, whose token is VALIDATE; any other token
+# here is a NAME-01 finding.
+#
+# ============================================================================================= #
+
+- name: 'PROCESS | Assert Under The Wrong Token'
+  ansible.builtin.assert:
+    that:
+      - fail_role_running.marker | default('') | length > 0
+    fail_msg: >-
+      Refusing to continue: marker is required for every state. See README.md.
+    quiet: true

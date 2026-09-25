@@ -1,0 +1,16 @@
+/* Rule ids are read constantly and compared against checker output, so they are
+   set in a monospace face at full contrast rather than as decorative headings. */
+:root {
+  --ifm-color-primary: #1f6feb;
+  --ifm-code-font-size: 92%;
+  --ifm-heading-font-weight: 650;
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #58a6ff;
+}
+
+.markdown h1 {
+  font-family: var(--ifm-font-family-monospace);
+  letter-spacing: -0.01em;
+}
